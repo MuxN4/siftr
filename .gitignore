@@ -1,0 +1,32 @@
+# Binaries
+siftr
+
+# Build artifacts
+*.exe
+*.out
+*.a
+*.o
+*.so
+
+# Go modules
+go.sum
+go.work
+go.work.sum
+
+# Logs & temp files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Environment variables
+.env
+
+# IDE/editor-specific files
+.vscode/
+.idea/
+*.iml
+
+# macOS files
+.DS_Store
+
