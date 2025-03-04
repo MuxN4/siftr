@@ -36,6 +36,7 @@ func main() {
 	// Health Router (Subrouter for Readiness)
 	healthRouter := chi.NewRouter()
 	healthRouter.Get("/ready", readinessHandler)
+	healthRouter.Get("/error", errorHandler)
 
 	router.Mount("/health", healthRouter)
 
