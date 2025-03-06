@@ -1,15 +1,23 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 
+	"github.com/MuxN4/siftr/internal/db"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
+
+	_ "github.com/lib/pq"
 )
+
+type apiConfig struct {
+	DB *db.Queries
+}
 
 func main() {
 	err := godotenv.Load()
@@ -21,6 +29,19 @@ func main() {
 	if portString == "" {
 		log.Fatal("Missing PORT")
 	}
+
+	dbURI := os.Getenv("DB_URI")
+	if dbURI == "" {
+		log.Fatal("Missing DB_URI")
+	}
+
+	conn, err := sql.Open("postgres", dbURI)
+	if err != nil {
+		log.Fatal("Can't connect to database:", err)
+	}
+
+	queries := db.New(conn)
+	apiCfg := apiConfig{DB: queries}
 
 	router := chi.NewRouter()
 
@@ -37,6 +58,7 @@ func main() {
 	healthRouter := chi.NewRouter()
 	healthRouter.Get("/ready", readinessHandler)
 	healthRouter.Get("/error", errorHandler)
+	healthRouter.Post("/users", apiCfg.createUserHandler)
 
 	router.Mount("/health", healthRouter)
 
