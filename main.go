@@ -60,6 +60,7 @@ func main() {
 	healthRouter.Get("/error", errorHandler)
 	healthRouter.Post("/users", apiCfg.createUserHandler)
 	healthRouter.Get("/users", apiCfg.middlewareAuth(apiCfg.GerUserHandler))
+	healthRouter.Post("/feeds", apiCfg.middlewareAuth(apiCfg.createFeedHandler))
 
 	router.Mount("/health", healthRouter)
 
