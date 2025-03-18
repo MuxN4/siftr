@@ -59,6 +59,7 @@ func main() {
 	healthRouter.Get("/ready", readinessHandler)
 	healthRouter.Get("/error", errorHandler)
 	healthRouter.Post("/users", apiCfg.createUserHandler)
+	healthRouter.Get("/users", apiCfg.GerUserHandler)
 
 	router.Mount("/health", healthRouter)
 
