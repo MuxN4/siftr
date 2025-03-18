@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/MuxN4/siftr/internal/auth"
 	"github.com/MuxN4/siftr/internal/db"
 	"github.com/google/uuid"
 )
@@ -29,6 +30,23 @@ func (apiCfg *apiConfig) createUserHandler(w http.ResponseWriter, r *http.Reques
 	})
 	if err != nil {
 		sendErrorResponse(w, 400, fmt.Sprintf("Error creating user: %v", err))
+		return
+	}
+
+	sendJSONResponse(w, 201, databaseUserToUser(user))
+}
+
+func (apiCfg *apiConfig) GerUserHandler(w http.ResponseWriter, r *http.Request) {
+	apiKey, err := auth.GetApiKey(r.Header)
+	if err != nil {
+		sendErrorResponse(w, 403, fmt.Sprintf("Auth error: %v", err))
+		return
+	}
+
+	// Fetch user from the database
+	user, err := apiCfg.DB.GetUserByApiKey(r.Context(), apiKey)
+	if err != nil {
+		sendErrorResponse(w, http.StatusNotFound, "User not found")
 		return
 	}
 
