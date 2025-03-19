@@ -65,6 +65,8 @@ func main() {
 	healthRouter.Post("/feeds", apiCfg.middlewareAuth(apiCfg.createFeedHandler))
 	healthRouter.Get("/feeds", apiCfg.getFeedsHandler)
 
+	healthRouter.Post("/feed_followers", apiCfg.middlewareAuth(apiCfg.createFeedFollowersHandler))
+
 	router.Mount("/health", healthRouter)
 
 	server := &http.Server{
