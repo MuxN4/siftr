@@ -66,6 +66,8 @@ func main() {
 	healthRouter.Get("/feeds", apiCfg.getFeedsHandler)
 
 	healthRouter.Post("/feed_followers", apiCfg.middlewareAuth(apiCfg.createFeedFollowersHandler))
+	healthRouter.Get("/feed_followers", apiCfg.middlewareAuth(apiCfg.getFeedFollowersHandler))
+	healthRouter.Delete("/feed_followers/{feedFollowID}", apiCfg.middlewareAuth(apiCfg.deleteFeedFollowersHandler))
 
 	router.Mount("/health", healthRouter)
 
